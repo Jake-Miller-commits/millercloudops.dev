@@ -403,17 +403,29 @@ footer a{color:var(--accent);}
   /* ---------- Contact form to n8n ---------- */
   const form = document.getElementById('contactForm');
   const msgEl = document.getElementById('formMsg');
-  const WEBHOOK_URL = 'https://n8n.ctrlnexus.net/form/faf06e22-1146-4246-923f-031bb8b9a26e'; // <-- your production URL
+  const WEBHOOK_URL = 'https://n8n.ctrlnexus.net/webhook/0e38241e-5e49-43c7-af8e-7d0cedd02fc9'; // <-- your production URL
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();                         // stop default browser submit
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
-
+    
+    // Create payload with exact field names expected by n8n form trigger
+    const payload = {
+      name: document.querySelector('input[name="name"]').value,
+      email: document.querySelector('input[name="email"]').value,
+      message: document.querySelector('textarea[name="message"]').value,
+      submittedAt: new Date().toISOString(),
+      formMode: "production"
+    };
+    
+    console.log('Payload being sent:', payload);
+    
     try {
       const resp = await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(payload),
       });
 
@@ -422,10 +434,45 @@ footer a{color:var(--accent);}
       msgEl.textContent = '✅ Your message was sent – I’ll get back to you soon!';
       form.reset();
     } catch (err) {
-      console.error(err);
+      console.error('Form submission error:', err);
       msgEl.textContent = `⚠️ Oops! Something went wrong: ${err.message}`;
     }
   });
+
+  // Add additional debugging function for n8n webhook testing
+  function debugN8nWebhook() {
+    const testPayload = {
+      name: "Test User",
+      email: "test@example.com",
+      message: "Test message from debugging function",
+      submittedAt: new Date().toISOString(),
+      formMode: "production"
+    };
+    
+    console.log('Debug: Testing n8n webhook with payload:', testPayload);
+    
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(testPayload),
+    })
+    .then(response => {
+      console.log('Debug: Response status:', response.status);
+      return response.text();
+    })
+    .then(data => {
+      console.log('Debug: Response data:', data);
+    })
+    .catch(error => {
+      console.error('Debug: Test error:', error);
+    });
+  }
+
+  
+  
 </script>
 </body>
 </html>
