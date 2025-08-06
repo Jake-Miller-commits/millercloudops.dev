@@ -54,10 +54,13 @@ p{margin-bottom:1rem;}
 /* ---------- Navbar ---------- */
 .nav{
   position:sticky;top:0;z-index:1000;
-  background:rgba(12,14,20,.95);
-  backdrop-filter:blur(5px);
-  padding:.5rem 2rem;
+  background:rgba(12,14,20,0.8);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:.75rem 2rem;
   display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  border-bottom:1px solid rgba(0,181,226,0.2);
 }
 .nav .logo{font-weight:700;font-size:1.2rem;}
 .nav ul{display:flex;gap:1.5rem;}
@@ -105,7 +108,13 @@ p{margin-bottom:1rem;}
 
 /* ---------- About ---------- */
 .about .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;}
-.about .card{background:var(--primary);border-radius:var(--radius);padding:1.5rem;}
+.about .card{
+  background:rgba(31,32,36,0.7);
+  backdrop-filter:blur(10px);
+  border-radius:var(--radius);
+  padding:1.5rem;
+  border:1px solid rgba(0,181,226,0.1);
+}
 .about .card h3{color:var(--accent);margin-bottom:.5rem;}
 .about .card p{color:var(--muted);}
 .about .skills{display:flex;flex-wrap:wrap;gap:1.5rem;}
@@ -149,10 +158,12 @@ p{margin-bottom:1rem;}
 }
 .timeline .event:nth-child(even) .dot{right:auto;left:-12px;}
 .timeline .event .content{
-  background:var(--primary);
+  background:rgba(31,32,36,0.7);
+  backdrop-filter:blur(10px);
   padding:1rem 1.5rem;
   border-radius:var(--radius);
-  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  border:1px solid rgba(0,181,226,0.1);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
 }
 .timeline .event h3{color:var(--accent);margin-bottom:.4rem;}
 .timeline .event p{color:var(--muted);}
@@ -160,10 +171,17 @@ p{margin-bottom:1rem;}
 /* ---------- Projects ---------- */
 .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
 .projects .card{
-  background:var(--primary);
+  background:rgba(31,32,36,0.7);
+  backdrop-filter:blur(10px);
   border-radius:var(--radius);
   overflow:hidden;
   display:flex;flex-direction:column;
+  border:1px solid rgba(0,181,226,0.1);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  transition:transform 0.3s ease;
+}
+.projects .card:hover{
+  transform:translateY(-5px);
 }
 .projects .card img{height:160px;object-fit:cover;}
 .projects .card .info{padding:1rem;flex:1;}
