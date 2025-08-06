@@ -74,14 +74,29 @@ p{margin-bottom:1rem;}
   position:relative;
   overflow:hidden;
 }
+.hero-canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  opacity:0.8;
+  z-index:0;
+  pointer-events: none;
+  background: transparent; /* Ensure no background is blocking it */
+}
 .hero::before{
   content:"";
   position:absolute;
   inset:0;
   background:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80');
   background-size:cover;background-position:center;
-  filter:brightness(35%);
+  filter:brightness(100%); /* Remove the dimming effect */
   z-index:-1;
+}
+.hero .container {
+  position:relative;
+  z-index:1; /* Make sure content stays on top */
 }
 .hero h1{font-size:3.5rem;margin-bottom:.5rem;}
 .hero p{font-size:1.4rem;margin-bottom:1.5rem;color:var(--muted);}
@@ -201,6 +216,7 @@ footer a{color:var(--accent);}
     <div class="typewriter" id="typewriter"></div>
     <button onclick="location.href='#about'">Explore my world</button>
   </div>
+  <canvas id="heroCanvas" class="hero-canvas"></canvas>
 </section>
 
 <!-- ==================== ABOUT ==================== -->
@@ -438,41 +454,123 @@ footer a{color:var(--accent);}
       msgEl.textContent = `⚠️ Oops! Something went wrong: ${err.message}`;
     }
   });
-
-  // Add additional debugging function for n8n webhook testing
-  function debugN8nWebhook() {
-    const testPayload = {
-      name: "Test User",
-      email: "test@example.com",
-      message: "Test message from debugging function",
-      submittedAt: new Date().toISOString(),
-      formMode: "production"
-    };
+</script>
+<script>
+  /* ---------- Canvas Animation for Hero Section ---------- */
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get canvas and context
+    const canvas = document.getElementById('heroCanvas');
     
-    console.log('Debug: Testing n8n webhook with payload:', testPayload);
+    // Debug: Check if canvas exists
+    if (!canvas) {
+      console.error('Canvas element not found!');
+      return;
+    }
     
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(testPayload),
-    })
-    .then(response => {
-      console.log('Debug: Response status:', response.status);
-      return response.text();
-    })
-    .then(data => {
-      console.log('Debug: Response data:', data);
-    })
-    .catch(error => {
-      console.error('Debug: Test error:', error);
-    });
-  }
+    const ctx = canvas.getContext('2d');
+    
+    // Debug: Check if context is available
+    if (!ctx) {
+      console.error('Could not get canvas 2D context!');
+      return;
+    }
 
-  
-  
+    // Set canvas to full window size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      // Debug: Log canvas dimensions
+      console.log('Canvas resized:', canvas.width, canvas.height);
+    }
+
+    // Initialize canvas size
+    resizeCanvas();
+    
+    // Handle window resize
+    window.addEventListener('resize', resizeCanvas);
+
+    // Dot class
+    class Dot {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.speedX = (Math.random() - 0.5) * 0.5; // Speed: ±0.25 (slower)
+        this.speedY = (Math.random() - 0.5) * 0.5; // Speed: ±0.25 (slower)
+        this.radius = 2; // Small circle radius
+      }
+
+      update() {
+        // Move dot
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Bounce off edges
+        if (this.x < 0 || this.x > canvas.width) {
+          this.speedX = -this.speedX;
+        }
+        if (this.y < 0 || this.y > canvas.height) {
+          this.speedY = -this.speedY;
+        }
+
+        // Keep dots within bounds
+        this.x = Math.max(0, Math.min(canvas.width, this.x));
+        this.y = Math.max(0, Math.min(canvas.height, this.y));
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'var(--accent)'; // Use accent color from CSS variables
+        ctx.fill();
+      }
+    }
+
+    // Create dots array
+    const dots = [];
+    for (let i = 0; i < 80; i++) {
+      dots.push(new Dot());
+    }
+
+    // Animation loop
+    function animate() {
+      // Clear canvas with semi-transparent overlay to create trail effect
+      ctx.fillStyle = 'rgba(12, 14, 20, 0.1)'; // Slightly transparent background
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw connections between close dots
+      for (let i = 0; i < dots.length; i++) {
+        for (let j = i + 1; j < dots.length; j++) {
+          const dx = dots[i].x - dots[j].x;
+          const dy = dots[i].y - dots[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) { // Connection threshold
+            // Draw connection line with translucent accent color
+            ctx.beginPath();
+            ctx.moveTo(dots[i].x, dots[i].y);
+            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.strokeStyle = 'rgba(0, 181, 226, 0.3)'; // Translucent accent color
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Update and draw all dots
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].update();
+        dots[i].draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Start animation with debug
+    console.log('Starting canvas animation...');
+    animate();
+  });
 </script>
 </body>
 </html>
