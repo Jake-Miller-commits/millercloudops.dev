@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Jacob Miller – DevOps Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Variables & Helpers ---------- */
+:root{
+  --primary:#1f2024;
+  --accent:#00b5e2;
+  --text:#e0e4e9;
+  --muted:#a3a5a8;
+  --bg-dark:#0c0e14;
+  --bg-light:#fafafa;
+  --radius:8px;
+  --transition:.3s;
+  --font-base:"Inter",sans-serif;
+  --font-code:"Source Code Pro",monospace;
+}
+
+/* ---------- Global ---------- */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg-dark);
+  color:var(--text);
+  font-family:var(--font-base);
+  line-height:1.6;
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+button{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:.75rem 1.5rem;
+  border-radius:var(--radius);
+  cursor:pointer;
+  font-weight:600;
+  transition:var(--transition);
+}
+button:hover{background:#0095c2;}
+section{padding:4rem 2rem;}
+h1,h2,h3{color:var(--text);}
+h1{font-size:2.8rem;line-height:1.2;}
+h2{font-size:2rem;margin-bottom:1rem;}
+h3{font-size:1.5rem;margin-bottom:.75rem;}
+p{margin-bottom:1rem;}
+.container{max-width:1100px;margin:auto;}
+
+/* ---------- Navbar ---------- */
+.nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(12,14,20,.95);
+  backdrop-filter:blur(5px);
+  padding:.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav .logo{font-weight:700;font-size:1.2rem;}
+.nav ul{display:flex;gap:1.5rem;}
+.nav ul li a{font-weight:500;color:var(--muted);}
+.nav ul li a:hover{color:var(--text);}
+
+/* ---------- Hero ---------- */
+.hero{
+  background:linear-gradient(135deg,#0c0e14,#1f2024);
+  color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  min-height:80vh;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80');
+  background-size:cover;background-position:center;
+  filter:brightness(35%);
+  z-index:-1;
+}
+.hero h1{font-size:3.5rem;margin-bottom:.5rem;}
+.hero p{font-size:1.4rem;margin-bottom:1.5rem;color:var(--muted);}
+.hero button{font-size:1rem;}
+.hero .typewriter{color:var(--accent);font-weight:600;white-space:nowrap;overflow:hidden;border-right:2px solid var(--accent);animation:blink 1s steps(2) infinite;}
+
+/* ---------- About ---------- */
+.about .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;}
+.about .card{background:var(--primary);border-radius:var(--radius);padding:1.5rem;}
+.about .card h3{color:var(--accent);margin-bottom:.5rem;}
+.about .card p{color:var(--muted);}
+.about .skills{display:flex;flex-wrap:wrap;gap:1.5rem;}
+.about .skill{
+  flex:1 1 120px;
+  background:var(--primary);
+  padding:.8rem;
+  border-radius:var(--radius);
+  text-align:center;
+}
+.about .skill h4{color:var(--accent);margin-bottom:.3rem;}
+.about .skill p{color:var(--muted);font-size:.9rem;}
+
+/* ---------- Timeline ---------- */
+.timeline{position:relative;}
+.timeline::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  width:4px;
+  height:100%;
+  background:var(--accent);
+  transform:translateX(-50%);
+}
+.timeline .event{
+  position:relative;
+  width:50%;
+  padding:1rem 2rem;
+  margin-bottom:2rem;
+}
+.timeline .event:nth-child(odd){left:0;text-align:right;}
+.timeline .event:nth-child(even){left:50%;text-align:left;}
+.timeline .event .dot{
+  position:absolute;
+  top:0;right:-12px;
+  width:24px;height:24px;background:var(--accent);
+  border-radius:50%;
+  border:4px solid var(--primary);
+  z-index:10;
+}
+.timeline .event:nth-child(even) .dot{right:auto;left:-12px;}
+.timeline .event .content{
+  background:var(--primary);
+  padding:1rem 1.5rem;
+  border-radius:var(--radius);
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.timeline .event h3{color:var(--accent);margin-bottom:.4rem;}
+.timeline .event p{color:var(--muted);}
+
+/* ---------- Projects ---------- */
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
+.projects .card{
+  background:var(--primary);
+  border-radius:var(--radius);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.projects .card img{height:160px;object-fit:cover;}
+.projects .card .info{padding:1rem;flex:1;}
+.projects .card .info h3{margin-bottom:.5rem;}
+.projects .card .info p{font-size:.9rem;color:var(--muted);}
+.projects .card button{margin:1rem;}
+
+/* ---------- Contact ---------- */
+.contact form{display:grid;grid-template-columns:1fr;gap:1rem;}
+.contact input,.contact textarea{background:var(--primary);border:none;padding:.75rem;border-radius:var(--radius);color:var(--text);}
+.contact textarea{resize:none;height:120px;}
+.contact button{align-self:flex-start;}
+
+/* ---------- Footer ---------- */
+footer{background:var(--primary);color:var(--muted);text-align:center;padding:1.5rem;}
+footer a{color:var(--accent);}
+
+/* ---------- Animations ---------- */
+@keyframes blink{0%{border-color:transparent}50%{border-color:var(--accent)}100%{border-color:transparent}}
+@keyframes fadeIn{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+
+/* ---------- Media Queries ---------- */
+@media(max-width:768px){
+  .timeline::before{left:8px;transform:none;}
+  .timeline .event{width:100%;left:0;padding-left:3rem;padding-right:0;text-align:left;}
+  .timeline .event:nth-child(even) .dot{right:auto;left:8px;}
+  .nav ul{display:none;}
+  .nav .menu-btn{display:block;}
+}
+</style>
+</head>
+<body>
+<!-- ==================== NAV ==================== -->
+<nav class="nav">
+  <div class="logo">Jacob Miller • DevOps</div>
+  <ul>
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero" class="hero">
+  <div class="container">
+    <h1>Hi 👋, I'm Jacob Miller</h1>
+    <p>Automating clouds & building resilience. One pipeline at a time.</p>
+    <div class="typewriter" id="typewriter"></div>
+    <button onclick="location.href='#about'">Explore my world</button>
+  </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section id="about" class="about">
+  <div class="container">
+    <h2>About Me</h2>
+    <p>Experienced DevOps engineer with 12+ years designing cloud‑native stacks, automating infra, and mentoring teams. I thrive on continuous learning, a healthy life, and turning chaotic codebases into production‑ready pipelines.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Values</h3>
+        <p>Continuous Learning • Health & Wellness • Financial Responsibility • Professional Excellence • Work‑Life Balance</p>
+      </div>
+      <div class="card">
+        <p>“One process at a time.” <em>— my mantra for iterative improvement</em></p>
+      </div>
+      <div class="card">
+        <p>Chaos? I turn it into automation scripts.</p>
+      </div>
+    </div>
+    <h3>Key Skills</h3>
+    <div class="skills">
+      <div class="skill"><h4>AWS</h4><p>EC2, ECS, CDK, Terraform</p></div>
+      <div class="skill"><h4>CI/CD</h4><p>GitLab CI, Jenkins, Bitbucket</p></div>
+      <div class="skill"><h4>Containerization</h4><p>Docker, Kubernetes, Nomad</p></div>
+      <div class="skill"><h4>IaC</h4><p>Terraform, Ansible, Packer</p></div>
+      <div class="skill"><h4>Monitoring</h4><p>Datadog, Grafana, CloudWatch</p></div>
+      <div class="skill"><h4>Security</h4><p>IAM, WAF, Zero‑Trust</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EXPERIENCE ==================== -->
+<section id="experience" class="experience">
+  <div class="container">
+    <h2>Experience</h2>
+    <div class="timeline">
+      <div class="event">
+        <div class="dot"></div>
+        <div class="content">
+          <h3>Sharpen Technologies – DevOps II</h3>
+          <p>April 2021 – Present | Indianapolis, IN (Remote)</p>
+          <ul>
+            <li>Lead migration of monolith to AWS microservices (70% faster deployments).</li>
+            <li>Built end‑to‑end CI/CD pipelines; reduced release cycle from monthly to weekly.</li>
+            <li>Mentored 4 junior engineers.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="event">
+        <div class="dot"></div>
+        <div class="content">
+          <h3>Genesys – Senior Cloud Engineer</h3>
+          <p>Aug 2015 – Oct 2020 | Indianapolis, IN</p>
+          <ul>
+            <li>Designed hybrid Azure‑on‑prem solution (99.9% uptime).</li>
+            <li>Automated IaC templates with PowerShell & Jenkins.</li>
+            <li>Reduced operational costs by 35% across 12+ client deployments.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="event">
+        <div class="dot"></div>
+        <div class="content">
+          <h3>Genesys – Systems Support Engineer</h3>
+          <p>Jan 2014 – Aug 2015 | Indianapolis, IN</p>
+          <ul>
+            <li>Resolved 1000+ high‑severity incidents (99.8% SLA).</li>
+            <li>Authored global knowledge base articles.</li>
+            <li>Trained new support engineers.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="event">
+        <div class="dot"></div>
+        <div class="content">
+          <h3>Infosys – Technology Analyst (Contract)</h3>
+          <p>Oct 2020 – Apr 2021 | Indianapolis, IN</p>
+          <ul>
+            <li>Standardized Ops procedures, reducing onboarding time by 50%.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECTS ==================== -->
+<section id="projects" class="projects">
+  <div class="container">
+    <h2>Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1602524815937-2d2d3e2e8c9d?auto=format&fit=crop&w=400&h=200&q=80" alt="LLM‑Powered DevOps Assistant">
+        <div class="info">
+          <h3>LLM‑Powered DevOps Assistant</h3>
+          <p>LangChain + Ollama to auto‑generate Terraform and debug CI/CD pipelines.</p>
+          <button>View on GitHub</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1587614382347-7d5e5a1d5d4f?auto=format&fit=crop&w=400&h=200&q=80" alt="Self‑Hosted AI Monitoring">
+        <div class="info">
+          <h3>AI‑Based Monitoring Stack</h3>
+          <p>n8n + LLMs for real‑time anomaly detection and alerts.</p>
+          <button>View on GitHub</button>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1581091012185-3c4e7b6d6f5c?auto=format&fit=crop&w=400&h=200&q=80" alt="Zero‑Trust Homelab">
+        <div class="info">
+          <h3>Zero‑Trust Homelab</h3>
+          <p>Strict network segmentation, automated cert management, MFA enforcement.</p>
+          <button>View on GitHub</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section id="contact" class="contact">
+  <div class="container">
+    <h2>Contact</h2>
+    <p>Drop me a line or just say hi. I'm always up for a chat about cloud, coding, or the best playlist for a workout.</p>
+    <form id="contactForm">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+    <p id="formMsg"></p>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>&copy; 2025 Jacob Miller • <a href="mailto:jacob@Millercloudops.dev">jacob@Millercloudops.dev</a></p>
+</footer>
+
+<!-- ==================== JS ==================== -->
+<script>
+  /* ---------- Typewriter in Hero ---------- */
+  const typeStr = "🚀 Automate. Optimize. Repeat.";
+  let typeIdx = 0;
+  const typewriterEl = document.getElementById('typewriter');
+  function typeNext(){
+    if(typeIdx < typeStr.length){
+      typewriterEl.textContent += typeStr.charAt(typeIdx);
+      typeIdx++;
+      setTimeout(typeNext,80);
+    }
+  }
+  typeNext();
+
+  /* ---------- Contact form to n8n ---------- */
+  const form = document.getElementById('contactForm');
+  const msgEl = document.getElementById('formMsg');
+  const WEBHOOK_URL = 'https://n8n.ctrlnexus.net/form/faf06e22-1146-4246-923f-031bb8b9a26e'; // <-- your production URL
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();                         // stop default browser submit
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const resp = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+
+      if (!resp.ok) throw new Error(`n8n responded ${resp.status}`);
+
+      msgEl.textContent = '✅ Your message was sent – I’ll get back to you soon!';
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      msgEl.textContent = `⚠️ Oops! Something went wrong: ${err.message}`;
+    }
+  });
+</script>
+</body>
+</html>
